@@ -5,11 +5,42 @@ using namespace std;
 
 #define N 4
 
-typedef struct HeapNode {
+class HeapNode {
+private:
+	static int constructor_count;
+	static int copy_constructor_count;
+	static int assign_constructor_count;
+public:
 	int key;
 	int row;
 	int column;
-} HeapNode;
+
+	HeapNode() {
+		constructor_count++;
+	//	cout << "HeapNode constructor called " << constructor_count << endl;
+	}
+
+	HeapNode(const HeapNode& obj) {
+		copy_constructor_count++;
+	//	cout << "HeapNode copy_constructor called " << copy_constructor_count << endl;
+		key = obj.key;
+		row = obj.row;
+		column = obj.column;
+	}
+
+	HeapNode& operator=(const HeapNode& obj) {
+		assign_constructor_count++;
+	//	cout << "HeapNode assign_constructor called " << assign_constructor_count << endl;
+		key = obj.key;
+		row = obj.row;
+		column = obj.column;
+		return *this;
+	}
+};
+
+int HeapNode::constructor_count = 0;
+int HeapNode::copy_constructor_count = 0;
+int HeapNode::assign_constructor_count = 0;
 
 class MinHeap {
 private:
@@ -30,13 +61,11 @@ private:
 		heap[to] = tmp;
 	}
 
-	void heapify(int index);
-
 public:
 	MinHeap(HeapNode* h, int s) : heap(h), size(s) {
 	}
 
-	HeapNode getMin() {
+	HeapNode& getMin() {
 		return heap[0];
 	}
 
@@ -44,6 +73,8 @@ public:
 		heap[0] = root;
 		heapify(0);
 	}
+
+	void heapify(int index);
 };
 
 void MinHeap::heapify(int index) {
@@ -80,7 +111,7 @@ void printSortedYoungTableau(int matrix[][N]) {
 	MinHeap minHeap(heap, N);
 
 	for (int i = 0; i < N * N; i++) {
-		HeapNode minNode = minHeap.getMin();
+		HeapNode& minNode = minHeap.getMin();
 		cout << minNode.key << ' ';
 
 		if (minNode.column < N - 1) {
@@ -90,7 +121,8 @@ void printSortedYoungTableau(int matrix[][N]) {
 			minNode.key = INT_MAX;
 		}
 
-		minHeap.replaceRoot(minNode);
+//		minHeap.replaceRoot(minNode);
+		minHeap.heapify(0);
 	}
 	cout << endl;
 }
