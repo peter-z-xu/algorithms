@@ -7,10 +7,10 @@ using namespace std;
 
 class HeapNode {
 private:
+public:
 	static int constructor_count;
 	static int copy_constructor_count;
 	static int assign_constructor_count;
-public:
 	int key;
 	int row;
 	int column;
@@ -135,5 +135,8 @@ int main() {
 		{32, 33, 39, 50}};
 
 	printSortedYoungTableau(matrix);
+	cout << "constructor count = " << HeapNode::constructor_count << endl;
+	cout << "copy constructor count = " << HeapNode::copy_constructor_count << endl;
+	cout << "assign constructor count = " << HeapNode::assign_constructor_count << endl;
 	return 0;
 }
