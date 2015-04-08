@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-Wall -g -c
+CFLAGS=-Wall -g
 LDFLAGS=
 
 SOURCES := $(wildcard *.cpp)
@@ -8,11 +8,8 @@ EXECUTABLES := $(SOURCES:%.cpp=%)
 
 all: $(EXECUTABLES)
 
-$(EXECUTABLES): $(OBJECTS) 
-	$(CC) $(LDFLAGS) $< -o $@
-
-.cpp.o:
-	$(CC) $(CFLAGS) $< -o $@
+.cpp:
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $<
 
 clean:
 	rm -f *.o
